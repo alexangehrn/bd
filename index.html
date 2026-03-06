@@ -110,7 +110,10 @@
     position: relative;
     transform-style: preserve-3d;
     transform: rotateX(-15deg) rotateY(-25deg);
-    animation: boxShake 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite 1.8s;
+  }
+
+  .gift-box-wrapper.shaking {
+    animation: boxShake 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
   }
 
   @keyframes boxShake {
@@ -125,7 +128,7 @@
 
   /* Stop all animations when opening */
   .gift-intro.opening .gift-box-wrapper {
-    animation: none;
+    animation: none !important;
   }
 
   /* ── BOX FACES (closed cube) ── */
@@ -163,61 +166,34 @@
     position: absolute;
     top: 0; bottom: 0;
     left: 50%; width: 22px; margin-left: -11px;
-    background: linear-gradient(180deg, var(--gold), var(--gold-dim), var(--gold));
-    opacity: 0.6;
+    background: linear-gradient(180deg, #C9A84C, #A07E28, #C9A84C);
+    opacity: 0.65;
   }
 
   .ribbon-h {
     position: absolute;
     left: 0; right: 0;
     top: 50%; height: 22px; margin-top: -11px;
-    background: linear-gradient(90deg, var(--gold), var(--gold-dim), var(--gold));
-    opacity: 0.6;
+    background: linear-gradient(90deg, #C9A84C, #A07E28, #C9A84C);
+    opacity: 0.65;
   }
 
   /* Bow */
   .bow-wrapper {
     position: absolute;
-    top: -28px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%) translateY(calc(var(--box-size) / -2)) rotateX(90deg) translateZ(0px);
     z-index: 10;
     transition: opacity 0.5s ease, transform 0.8s ease;
+    transform-style: preserve-3d;
   }
 
-  .bow-loop {
-    width: 32px;
-    height: 22px;
-    border: 3px solid var(--gold);
-    border-radius: 50% 50% 0 0;
-    position: absolute;
-    top: 0;
-    background: rgba(201,168,76,0.08);
+  .bow-svg-stand {
+    transform: rotateX(-68deg) translateY(12px);
+    transform-origin: center bottom;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));
   }
-
-  .bow-loop.left { transform: rotate(-30deg); left: -24px; }
-  .bow-loop.right { transform: rotate(30deg); left: 0px; }
-
-  .bow-center {
-    width: 14px; height: 14px;
-    background: var(--gold);
-    border-radius: 50%;
-    position: absolute;
-    top: 8px; left: -4px;
-  }
-
-  .bow-tail {
-    position: absolute;
-    top: 18px;
-    width: 3px;
-    height: 20px;
-    background: var(--gold);
-    border-radius: 0 0 2px 2px;
-    opacity: 0.7;
-  }
-
-  .bow-tail.left { left: -12px; transform: rotate(15deg); }
-  .bow-tail.right { left: 14px; transform: rotate(-15deg); }
 
   /* ── OPEN ANIMATION: sides fall, lid flies up ── */
   .opening .box-front {
@@ -250,7 +226,7 @@
   }
 
   .opening .bow-wrapper {
-    transform: translateX(-50%) translateY(-120px) scale(0.3);
+    transform: translate(-50%, -50%) translateY(calc(var(--box-size) * -3)) rotateX(90deg) translateZ(4px) scale(0.3);
     opacity: 0;
   }
 
@@ -640,13 +616,62 @@
             <div class="ribbon-v"></div>
             <div class="ribbon-h"></div>
           </div>
-          <div class="bow-wrapper">
-            <div class="bow-loop left"></div>
-            <div class="bow-loop right"></div>
-            <div class="bow-center"></div>
-            <div class="bow-tail left"></div>
-            <div class="bow-tail right"></div>
-          </div>
+        </div>
+
+        <!-- Bow (free-floating in 3D space above box) -->
+        <div class="bow-wrapper">
+          <svg class="bow-svg-stand" viewBox="-10 -8 155 58" width="130" height="50" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="loopL" x1="0" y1="0" x2="0.5" y2="1">
+                <stop offset="0%" stop-color="#C9A84C"/>
+                <stop offset="40%" stop-color="#A07E28"/>
+                <stop offset="75%" stop-color="#8B7332"/>
+                <stop offset="100%" stop-color="#6B5A22"/>
+              </linearGradient>
+              <linearGradient id="loopR" x1="1" y1="0" x2="0.5" y2="1">
+                <stop offset="0%" stop-color="#C9A84C"/>
+                <stop offset="40%" stop-color="#A07E28"/>
+                <stop offset="75%" stop-color="#8B7332"/>
+                <stop offset="100%" stop-color="#6B5A22"/>
+              </linearGradient>
+              <linearGradient id="innerL" x1="0.3" y1="0" x2="0.7" y2="1">
+                <stop offset="0%" stop-color="#3D3010"/>
+                <stop offset="50%" stop-color="#2A2008"/>
+                <stop offset="100%" stop-color="#1A1505"/>
+              </linearGradient>
+              <linearGradient id="innerR" x1="0.7" y1="0" x2="0.3" y2="1">
+                <stop offset="0%" stop-color="#3D3010"/>
+                <stop offset="50%" stop-color="#2A2008"/>
+                <stop offset="100%" stop-color="#1A1505"/>
+              </linearGradient>
+              <radialGradient id="knotG" cx="0.38" cy="0.3">
+                <stop offset="0%" stop-color="#D4B44E"/>
+                <stop offset="35%" stop-color="#C9A84C"/>
+                <stop offset="70%" stop-color="#A07E28"/>
+                <stop offset="100%" stop-color="#8B7332"/>
+              </radialGradient>
+            </defs>
+            <!-- GOLD BRIDGE — fills the gap between loops at center -->
+            <path d="M61,41 C62,36 64,33 66,31 C66,35 65,39 64,43 Z" fill="#B79234" opacity="0.95"/>
+            <path d="M73,41 C72,36 70,33 68,31 C68,35 69,39 70,43 Z" fill="#B79234" opacity="0.95"/>
+            <!-- LEFT LOOP — outer ribbon band -->
+            <path d="M67,42 C62,40 48,36 32,30 C14,24 -2,16 -4,6 C-6,-2 4,-6 18,-4 C34,-2 50,8 56,16 C62,24 66,34 67,42Z" fill="url(#loopL)" stroke="#8B7332" stroke-width="0.5"/>
+            <!-- LEFT LOOP — dark inner hole -->
+            <path d="M64,36 C60,32 48,28 36,24 C22,18 10,14 12,8 C14,2 22,0 34,2 C44,4 54,14 58,20 C62,28 64,32 64,36Z" fill="url(#innerL)" stroke="#2A2008" stroke-width="0.3"/>
+            <!-- LEFT LOOP — top highlight -->
+            <path d="M56,16 C50,8 34,-2 18,-4 C6,-6 -2,-2 -4,6" fill="none" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+
+            <!-- RIGHT LOOP — outer ribbon band -->
+            <path d="M67,42 C72,40 86,36 102,30 C120,24 136,16 138,6 C140,-2 130,-6 116,-4 C100,-2 84,8 78,16 C72,24 68,34 67,42Z" fill="url(#loopR)" stroke="#8B7332" stroke-width="0.5"/>
+            <!-- RIGHT LOOP — dark inner hole -->
+            <path d="M70,36 C74,32 86,28 98,24 C112,18 124,14 122,8 C120,2 112,0 100,2 C90,4 80,14 76,20 C72,28 70,32 70,36Z" fill="url(#innerR)" stroke="#2A2008" stroke-width="0.3"/>
+            <!-- RIGHT LOOP — top highlight -->
+            <path d="M78,16 C84,8 100,-2 116,-4 C128,-6 136,-2 138,6" fill="none" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+
+            <!-- CENTER KNOT — extended down to connect with ribbon -->
+            <ellipse cx="67" cy="43" rx="12" ry="9" fill="url(#knotG)" stroke="#A07E28" stroke-width="0.5"/>
+            <ellipse cx="65" cy="41" rx="7" ry="4.5" fill="rgba(201,168,76,0.3)"/>
+          </svg>
         </div>
 
         <!-- Front -->
@@ -803,6 +828,11 @@
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
       document.getElementById('tapHint').textContent = 'Tap to open';
     }
+
+    // Start shaking after box appear animation finishes (1.5s anim + 0.3s delay = 1.8s)
+    setTimeout(() => {
+      document.getElementById('boxWrapper').classList.add('shaking');
+    }, 1900);
 
     function createParticles() {
       particlesEl.innerHTML = '';
