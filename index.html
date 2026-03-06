@@ -85,6 +85,7 @@
     margin-top: 60px;
     opacity: 0;
     animation: fadeIn 1.2s ease forwards 2.2s;
+    text-align: center;
   }
 
   @keyframes fadeIn { to { opacity: 1; } }
@@ -109,11 +110,22 @@
     position: relative;
     transform-style: preserve-3d;
     transform: rotateX(-15deg) rotateY(-25deg);
+    animation: boxFloat 3s ease-in-out infinite 2s;
   }
 
-  /* Smooth hover shake */
-  .gift-intro:hover:not(.opening) .gift-box-wrapper {
-    animation: boxShake 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  /* Gentle float — works on mobile and desktop by default */
+  @keyframes boxFloat {
+    0%, 100% { transform: rotateX(-15deg) rotateY(-25deg) translateY(0) rotate(0); }
+    25% { transform: rotateX(-15deg) rotateY(-25deg) translateY(-6px) rotate(0.8deg); }
+    50% { transform: rotateX(-15deg) rotateY(-25deg) translateY(0) rotate(0); }
+    75% { transform: rotateX(-15deg) rotateY(-25deg) translateY(-4px) rotate(-0.5deg); }
+  }
+
+  /* Desktop hover: shake replaces float */
+  @media (hover: hover) {
+    .gift-intro:hover:not(.opening) .gift-box-wrapper {
+      animation: boxShake 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+    }
   }
 
   @keyframes boxShake {
@@ -124,6 +136,11 @@
     40% { transform: rotateX(-15deg) rotateY(-25deg) translate(-1px, 2px) rotate(-0.5deg); }
     50% { transform: rotateX(-15deg) rotateY(-25deg) translate(1px, -1px) rotate(0.3deg); }
     60% { transform: rotateX(-15deg) rotateY(-25deg) translate(0, 0) rotate(0); }
+  }
+
+  /* Stop all animations when opening */
+  .gift-intro.opening .gift-box-wrapper {
+    animation: none;
   }
 
   /* ── BOX FACES (closed cube) ── */
@@ -357,6 +374,8 @@
     text-transform: uppercase;
     color: var(--gold); margin-bottom: 40px;
     opacity: 0;
+    text-align: center;
+    padding: 0 20px;
   }
 
   .hero-title {
@@ -612,6 +631,9 @@
     .gift-card { padding: 40px 28px; }
     .gift-details { grid-template-columns: 1fr 1fr; }
     .included-grid { grid-template-columns: 1fr; }
+    .hero-date { font-size: 10px; letter-spacing: 3px; }
+    .gift-intro-hint { font-size: 10px; letter-spacing: 3px; text-align: center; padding: 0 20px; }
+    .gift-intro-tap { font-size: 9px; letter-spacing: 3px; }
   }
 </style>
 </head>
@@ -680,7 +702,7 @@
       </div>
     </div>
 
-    <div class="gift-intro-tap">Click to open</div>
+    <div class="gift-intro-tap" id="tapHint">Click to open</div>
   </div>
 
   <div class="particles" id="particles"></div>
@@ -791,6 +813,11 @@
       }
     `;
     document.head.appendChild(ss);
+
+    // Show "Tap to open" on touch devices
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+      document.getElementById('tapHint').textContent = 'Tap to open';
+    }
 
     function createParticles() {
       particlesEl.innerHTML = '';
