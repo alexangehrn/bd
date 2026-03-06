@@ -110,22 +110,7 @@
     position: relative;
     transform-style: preserve-3d;
     transform: rotateX(-15deg) rotateY(-25deg);
-    animation: boxFloat 3s ease-in-out infinite 2s;
-  }
-
-  /* Gentle float — works on mobile and desktop by default */
-  @keyframes boxFloat {
-    0%, 100% { transform: rotateX(-15deg) rotateY(-25deg) translateY(0) rotate(0); }
-    25% { transform: rotateX(-15deg) rotateY(-25deg) translateY(-6px) rotate(0.8deg); }
-    50% { transform: rotateX(-15deg) rotateY(-25deg) translateY(0) rotate(0); }
-    75% { transform: rotateX(-15deg) rotateY(-25deg) translateY(-4px) rotate(-0.5deg); }
-  }
-
-  /* Desktop hover: shake replaces float */
-  @media (hover: hover) {
-    .gift-intro:hover:not(.opening) .gift-box-wrapper {
-      animation: boxShake 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
-    }
+    animation: boxShake 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite 1.8s;
   }
 
   @keyframes boxShake {
