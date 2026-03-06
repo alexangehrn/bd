@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Franklin:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D5A3;
+    --gold-dim: #8B7332;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --charcoal: #1A1A1A;
+    --smoke: #2A2A2A;
+    --silver: #999;
+    --light: #E0E0E0;
+    --white: #F5F5F0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Libre Franklin', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── HERO SECTION ── */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 20% 80%, rgba(201,168,76,0.03) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Anamorphic lens flare line */
+  .lens-flare {
+    position: absolute;
+    top: 50%;
+    left: -10%;
+    right: -10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.0), rgba(201,168,76,0.15), rgba(232,213,163,0.4), rgba(201,168,76,0.15), rgba(201,168,76,0.0), transparent);
+    transform: translateY(-50%);
+    animation: flareGlow 4s ease-in-out infinite alternate;
+    opacity: 0;
+    animation-delay: 2s;
+  }
+
+  @keyframes flareGlow {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  .hero-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 0.5s;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(48px, 10vw, 120px);
+    line-height: 0.9;
+    text-align: center;
+    letter-spacing: -2px;
+    opacity: 0;
+    animation: fadeUp 1.5s ease forwards 0.8s;
+  }
+
+  .hero-title .line-1 {
+    display: block;
+    color: var(--light);
+  }
+
+  .hero-title .line-2 {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+    font-size: 0.55em;
+    letter-spacing: 2px;
+    margin-top: 10px;
+  }
+
+  .hero-sub {
+    margin-top: 50px;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--silver);
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 1.4s;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 2s;
+  }
+
+  .scroll-cue span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  .scroll-cue .arrow {
+    width: 1px;
+    height: 30px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.3); }
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 120px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 40px;
+    padding-left: 50px;
+    position: relative;
+  }
+
+  .section-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 35px;
+    height: 1px;
+    background: var(--gold-dim);
+  }
+
+  /* ── GIFT REVEAL ── */
+  .gift-card {
+    background: linear-gradient(135deg, var(--charcoal) 0%, var(--dark) 50%, var(--charcoal) 100%);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 2px;
+    padding: 60px 50px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .gift-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .gift-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .gift-icon {
+    font-size: 36px;
+    margin-bottom: 24px;
+    display: block;
+  }
+
+  .gift-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 4vw, 38px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .gift-org {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .gift-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .detail-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  .detail-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--white);
+  }
+
+  /* ── WHAT'S INCLUDED ── */
+  .included-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2px;
+    margin-top: 30px;
+  }
+
+  .included-item {
+    background: var(--charcoal);
+    padding: 30px;
+    position: relative;
+    transition: background 0.3s ease;
+  }
+
+  .included-item:hover {
+    background: var(--smoke);
+  }
+
+  .included-item .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: rgba(201,168,76,0.15);
+    position: absolute;
+    top: 15px;
+    right: 20px;
+  }
+
+  .included-item h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+
+  .included-item p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--silver);
+  }
+
+  /* ── MESSAGE ── */
+  .personal-message {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.5vw, 32px);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--light);
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 80px 20px;
+    position: relative;
+  }
+
+  .personal-message::before,
+  .personal-message::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--gold-dim);
+    margin: 0 auto 40px;
+  }
+
+  .personal-message::after {
+    margin: 40px auto 0;
+  }
+
+  .message-sign {
+    font-family: 'Libre Franklin', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-top: 30px;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align: center;
+    padding: 80px 40px 120px;
+  }
+
+  .cta-note {
+    font-size: 14px;
+    color: var(--silver);
+    line-height: 1.8;
+    max-width: 550px;
+    margin: 0 auto 40px;
+  }
+
+  .cta-button {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    padding: 18px 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .cta-button:hover {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(201,168,76,0.2);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.15);
+  }
+
+  /* ── FILMSTRIP DIVIDER ── */
+  .filmstrip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 40px 0;
+    opacity: 0.15;
+  }
+
+  .filmstrip .perf {
+    width: 8px;
+    height: 12px;
+    border: 1px solid var(--gold);
+    border-radius: 1px;
+  }
+
+  .filmstrip .frame {
+    width: 40px;
+    height: 28px;
+    border: 1px solid var(--gold);
+    border-radius: 1px;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .section { padding: 80px 24px; }
+    .gift-card { padding: 40px 28px; }
+    .gift-details { grid-template-columns: 1fr 1fr; }
+    .included-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="lens-flare"></div>
+    <div class="hero-date">March 8, 2026</div>
+    <h1 class="hero-title">
+      <span class="line-1">Happy Birthday</span>
+      <span class="line-2">Adrian Parmigiano</span>
+    </h1>
+    <p class="hero-sub">From your sister</p>
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <div class="arrow"></div>
+    </div>
+  </section>
+
+  <!-- ═══ FILMSTRIP ═══ -->
+  <div class="filmstrip">
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+  </div>
+
+  <!-- ═══ THE GIFT ═══ -->
+  <div class="section">
+    <div class="section-label reveal">So here's the thing</div>
+
+    <div class="gift-card reveal">
+      <span class="gift-icon">🎬</span>
+      <div class="gift-org">The American Society of Cinematographers</div>
+      <div class="gift-title">ASC Master Class<br>Hollywood 2026</div>
+      <p style="color: var(--silver); font-size: 15px; line-height: 1.8; margin-top: 16px;">
+        Remember that masterclass you kept talking about? The one in LA with the ASC? Five days at the Clubhouse in Hollywood with some of the best cinematographers in the world. Consider it done.
+      </p>
+      <div class="gift-details">
+        <div class="detail-item">
+          <span class="detail-label">When</span>
+          <span class="detail-value">May 11–15, 2026</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Where</span>
+          <span class="detail-value">Hollywood, LA</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Duration</span>
+          <span class="detail-value">5 Days</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Participants</span>
+          <span class="detail-value">Max 28</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ WHAT'S COVERED ═══ -->
+  <div class="section">
+    <div class="section-label reveal">Don't worry about</div>
+
+    <div class="included-grid reveal">
+      <div class="included-item">
+        <span class="num">01</span>
+        <h3>The Masterclass</h3>
+        <p>Full tuition for the 5-day ASC Master Class — meals, transport, networking dinners, all of it. Sorted.</p>
+      </div>
+      <div class="included-item">
+        <span class="num">02</span>
+        <h3>Your Flight</h3>
+        <p>Round-trip to Los Angeles. We'll figure out the dates together once you're registered.</p>
+      </div>
+      <div class="included-item">
+        <span class="num">03</span>
+        <h3>A Place to Stay</h3>
+        <p>Hotel for the week near the ASC Clubhouse. Come a day early, stay a day late if you want — it's on me.</p>
+      </div>
+      <div class="included-item">
+        <span class="num">04</span>
+        <h3>Just Show Up</h3>
+        <p>All you need to do is send them your résumé and get accepted. The rest is handled.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FILMSTRIP ═══ -->
+  <div class="filmstrip">
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+    <div class="frame"></div>
+    <div class="perf"></div><div class="perf"></div>
+  </div>
+
+  <!-- ═══ PERSONAL MESSAGE ═══ -->
+  <div class="section">
+    <div class="personal-message reveal">
+      Take the week for yourself. No kids, no wife, just you being a free man in LA for a few days. It's not like you're good at anything else so you might as well go all in on this one. Soak it all in, meet people, nerd out about lenses or whatever it is you do. And then come back and make something insane.
+      <span class="message-sign">Your Sister</span>
+    </div>
+  </div>
+
+  <!-- ═══ NEXT STEPS ═══ -->
+  <div class="cta-section">
+    <div class="section-label reveal" style="text-align:center; padding-left:0;">
+      <span style="display:inline-block;">What Now?</span>
+    </div>
+    <p class="cta-note reveal">
+      There are only 15 spots left so don't sit on this too long. You'll need to submit your résumé to apply — they review everyone before accepting. Once you're in, we'll sort out the flights and hotel together. Everything is on me.
+    </p>
+    <a href="https://store.ascmag.com/products/asc-master-class-deposit-2026-in-person-classes-only" target="_blank" class="cta-button reveal">
+      Go Register →
+    </a>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="footer">
+    <div class="footer-text">A birthday gift — crafted with love — March 2026</div>
+  </div>
+
+  <!-- ═══ SCROLL REVEAL ═══ -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
